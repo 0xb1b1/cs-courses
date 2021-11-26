@@ -5,49 +5,71 @@ namespace ConsoleApplication1
     {
         static void Main(string[] args)
         {
-            int[] array_0 = new int[7] { 1, 2, 3, 4, 5, 6, 7 };
-            int[] array_1 = new int[8] { 8, 7, 6, 5, 4, 3, 2, 1 };
-            Console.WriteLine("Input:");
-            outputArrays(array_0, array_1);
-            removeByIndex(ref array_0, biggestElementLocation(array_0));
-            removeByIndex(ref array_1, biggestElementLocation(array_1));
-            int[] out_array = array_0.Concat(array_1).ToArray();
+            int[,] matrix_0 = new int[6, 6] {
+                                        {1,69,2,3,4,5},
+                                        {2,3,4,2,3,1},
+                                        {3,1,54,5,4,2},
+                                        {4,3,2,2,8,5},
+                                        {2,3,8,5,33,3},
+                                        {5,1,2,1,4,33}
+                                        };
+	    Console.WriteLine("Input:");
+	    outputIndentedMatrix(matrix_0);
+	    swapMatrixColumns(ref matrix_0, findBiggestMatrixElementColumnUnderInclMainDiagonal(matrix_0), findSmallestMatrixElementColumnUnderMainDiagonal(matrix_0));
             Console.WriteLine("Output:");
-            outputArray(out_array);
+            outputIndentedMatrix(matrix_0);
         }
-        static void removeByIndex(ref int[] array, int rm_index)
+        static int findBiggestMatrixElementColumnUnderInclMainDiagonal(int[,] matrix)
+	{
+            int biggest_number = matrix[0,0], biggest_number_column = 0;
+	    for (int row = 0; row < matrix.GetLength(0); row++)
+	    {
+                for (int column = 0; column <= row; column++)
+		{
+                    if (matrix[row, column] > biggest_number) {
+                        biggest_number = matrix[row, column];
+			biggest_number_column = column;
+		    }
+		}
+	    }
+	    return biggest_number_column;
+	}
+	static int findSmallestMatrixElementColumnUnderMainDiagonal(int[,] matrix)
         {
-            array = array.Where((source, index) =>index != rm_index).ToArray();
-        }
-        static int biggestElementLocation(int[] array)
-        {
-            int biggest = array[0];
-            int biggest_index = 0;
-            for (int i = 0; i < array.Length; i++)
+            int smallest_number = matrix[0,0], smallest_number_column = 0;
+            for (int row = 0; row < matrix.GetLength(0); row++)
             {
-                if (array[i] > biggest)
-                {
-                    biggest = array[i];
-                    biggest_index = i;
+                for (int column = row + 1; column < matrix.GetLength(1); column++)
+                {Console.WriteLine($"{row} - row {column} - column; checking for smallest num");
+                    if (matrix[row, column] < smallest_number) {Console.WriteLine($"{matrix[row, column]} - new smallest number");
+                        smallest_number = matrix[row, column];
+                        smallest_number_column = column;
+                    }
                 }
             }
-            return biggest_index;
+            return smallest_number_column;
         }
-        static void outputArray(int[] array)
+        static void swapMatrixColumns(ref int[,] matrix, int column_1, int column_2)
+        {
+            for(int i = 0; i < matrix.GetLength(0); i++)
+            {
+                int temp = matrix[i, column_1];
+                matrix[i, column_1] = matrix[i, column_2];
+                matrix[i, column_2] = temp;
+            }
+        }
+        static void outputIndentedMatrix(int[,] matrix)
         {
             Console.Write("\t");
-            for (int element = 0; element < array.GetLength(0); element++)
+            for (int row = 0; row < matrix.GetLength(0); row++)
             {
-                Console.Write($"{array[element]} ");
+                for (int column = 0; column < matrix.GetLength(1); column++)
+                {
+                    Console.Write($"{matrix[row, column]} ");
+                }
+                if(row != matrix.GetLength(0) - 1) Console.Write("\n\t");
+                else Console.Write("\n");
             }
-            Console.WriteLine();
-        }
-        static void outputArrays(int[] array_0, int[] array_1)
-        {
-            Console.Write("array_0:\n\t");
-            outputArray(array_0);
-            Console.Write("array_1:\n\t");
-            outputArray(array_1);
         }
     }
 }
