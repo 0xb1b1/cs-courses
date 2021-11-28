@@ -150,7 +150,6 @@ namespace ConsoleApplication1
             {
                 student_groups[group].SortByGPA();
             }
-            string[] student_group_names = listGroups(students);
             printStudentsByGroup(student_groups);
         }
         static string[] listGroups(Student[] students) {
