@@ -151,15 +151,7 @@ namespace ConsoleApplication1
                 student_groups[group].SortByGPA();
             }
             string[] student_group_names = listGroups(students);
-            for (int group = 0; group < student_groups.Length; group++)
-            {
-                Console.WriteLine($"Group {student_groups[group].GetGroupName()}, average GPA: {student_groups[group].GetAverageGPA()}");
-                for (int student = 0; student < student_groups[group].GetStudents().Length; student++)
-                {
-                    Console.WriteLine($"{student_groups[group].GetStudents()[student].GetName()} {student_groups[group].GetStudents()[student].GetGPA()}");
-                }
-                Console.WriteLine();
-            }
+            printStudentGroups(student_groups);
         }
         static string[] listGroups(Student[] students) {
             string[] groups = new string[students.Length];
@@ -207,6 +199,19 @@ namespace ConsoleApplication1
                         student_groups[group].AddStudent(students[student]);
                     }
                 }
+            }
+        }
+        static void printStudentGroups(StudentGroup[] student_groups)
+        {
+            for (int group = 0; group < student_groups.Length; group++)
+            {
+                Console.WriteLine($"Group {student_groups[group].GetGroupName()}\tAverage GPA: {student_groups[group].GetAverageGPA()}");
+                Console.WriteLine("Student\t\tGPA");
+                for (int student = 0; student < student_groups[group].GetStudents().Length; student++)
+                {
+                    Console.WriteLine($"{student_groups[group].GetStudents()[student].GetName()}\t{student_groups[group].GetStudents()[student].GetGPA()}");
+                }
+                Console.WriteLine();
             }
         }
     }
