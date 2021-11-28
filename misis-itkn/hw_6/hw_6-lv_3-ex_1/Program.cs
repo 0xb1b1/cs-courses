@@ -151,7 +151,7 @@ namespace ConsoleApplication1
                 student_groups[group].SortByGPA();
             }
             string[] student_group_names = listGroups(students);
-            printStudentGroups(student_groups);
+            printStudentsByGroup(student_groups);
         }
         static string[] listGroups(Student[] students) {
             string[] groups = new string[students.Length];
@@ -201,7 +201,7 @@ namespace ConsoleApplication1
                 }
             }
         }
-        static void printStudentGroups(StudentGroup[] student_groups)
+        static void printStudentsByGroup(StudentGroup[] student_groups)
         {
             for (int group = 0; group < student_groups.Length; group++)
             {
