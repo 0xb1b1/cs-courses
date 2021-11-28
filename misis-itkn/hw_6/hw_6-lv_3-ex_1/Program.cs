@@ -4,7 +4,7 @@ namespace ConsoleApplication1
     struct Student
     {
         private string name, group;
-        private float gpa = 0, grades_sum = 0;
+        private float gpa = 0;
         private float[] grades;
         public Student(string name, string group, float[] grades)
         {
