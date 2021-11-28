@@ -146,11 +146,15 @@ namespace ConsoleApplication1
             StudentGroup[] student_groups = new StudentGroup[listGroups(students).Length];
             sortStudentsByGroup(ref student_groups, students);
             sortGroupsByAverageGPA(ref student_groups);
+            sortGrouppedStudentsByGPA(ref student_groups);
+            printStudentsByGroup(student_groups);
+        }
+        static void sortGrouppedStudentsByGPA(ref StudentGroup[] student_groups)
+        {
             for (int group = 0; group < student_groups.Length; group++)
             {
                 student_groups[group].SortByGPA();
             }
-            printStudentsByGroup(student_groups);
         }
         static string[] listGroups(Student[] students) {
             string[] groups = new string[students.Length];
