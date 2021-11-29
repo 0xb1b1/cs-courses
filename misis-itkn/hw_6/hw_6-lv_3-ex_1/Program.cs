@@ -82,6 +82,7 @@ namespace ConsoleApplication1
         private Student[] students;
         private string group_name = "";
         private int students_count = 0;
+        private float average_gpa = 0;
         public StudentGroup(Student[] students)
         {
             this.students = students;
@@ -97,6 +98,7 @@ namespace ConsoleApplication1
             new_students[this.students_count] = student;
             this.students = new_students;
             this.students_count++;
+            CalculateAverageGPA();
         }
         public void RemoveStudent(int index)
         {
@@ -111,6 +113,7 @@ namespace ConsoleApplication1
             }
             this.students = new_students;
             this.students_count--;
+            CalculateAverageGPA();
         }
         public void SortByGPA()
         {
@@ -133,14 +136,18 @@ namespace ConsoleApplication1
             }
             this.students = new_students;
         }
-        public float GetAverageGPA()
+        public void CalculateAverageGPA()
         {
-            float sum = 0;
+            float gpa_sum = 0;
             for (int i = 0; i < this.students_count; i++)
             {
-                sum += this.students[i].GetGPA();
+                gpa_sum += this.students[i].GetGPA();
             }
-            return sum / this.students_count;
+            this.average_gpa = gpa_sum / this.students_count;
+        }
+        public float GetAverageGPA()
+        {
+            return this.average_gpa;
         }
         public Student[] GetStudents()
         {
@@ -153,6 +160,26 @@ namespace ConsoleApplication1
         public void SetGroupName(string group_name)
         {
             this.group_name = group_name;
+        }
+        public void AddStudentGrade(string student_full_name, float grade)
+        {
+            for (int i = 0; i < this.students_count; i++)
+            {
+                if (this.students[i].GetFullName() == student_full_name)
+                {
+                    this.students[i].AddGrade(grade);
+                }
+            }
+        }
+        public void SetStudentGrades(string student_full_name, float[] grades)
+        {
+            for (int i = 0; i < this.students_count; i++)
+            {
+                if (this.students[i].GetFullName() == student_full_name)
+                {
+                    this.students[i].SetGrades(grades);
+                }
+            }
         }
     }
     class Program
