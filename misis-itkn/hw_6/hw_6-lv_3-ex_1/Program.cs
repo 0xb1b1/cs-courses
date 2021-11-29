@@ -100,16 +100,17 @@ namespace ConsoleApplication1
             this.students_count++;
             CalculateAverageGPA();
         }
-        public void RemoveStudent(int index)
+        public void RemoveStudent(string full_name)
         {
             Student[] new_students = new Student[this.students_count - 1];
-            for (int i = 0; i < index; i++)
+            int index = 0;
+            for (int i = 0; i < this.students_count; i++)
             {
-                new_students[i] = this.students[i];
-            }
-            for (int i = index; i < this.students_count - 1; i++)
-            {
-                new_students[i] = this.students[i + 1];
+                if (this.students[i].GetFullName() != full_name)
+                {
+                    new_students[index] = this.students[i];
+                    index++;
+                }
             }
             this.students = new_students;
             this.students_count--;
