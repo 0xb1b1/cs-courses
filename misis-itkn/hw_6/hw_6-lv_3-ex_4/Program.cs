@@ -150,6 +150,7 @@ namespace ConsoleApplication1
     {
         static void Main(string[] args)
         {
+            string table_title = "Ski race results";
             Participant[] participants = new Participant[6];
             participants[0] = new Participant("Oleg", "Styopovich", "CloudBusters", 5.4F);
             participants[1] = new Participant("Kot", "Artyomovich", "CloudBusters", 6.3F);
@@ -161,7 +162,7 @@ namespace ConsoleApplication1
             sortStudentsByGroup(ref participant_groups, participants);
             sortGroupsByAverageGPA(ref participant_groups);
             sortGrouppedParticipantsByScore(ref participant_groups);
-            printParticipantsByGroup(participant_groups);
+            printTableOfParticipantsByGroup(participant_groups, table_title);
         }
         static void sortGrouppedParticipantsByScore(ref ParticipantGroup[] participant_groups)
         {
@@ -218,8 +219,9 @@ namespace ConsoleApplication1
                 }
             }
         }
-        static void printParticipantsByGroup(ParticipantGroup[] participant_groups)
+        static void printTableOfParticipantsByGroup(ParticipantGroup[] participant_groups, string table_title)
         {
+            Console.WriteLine($"{table_title}\n");
             string entry_tabs = "\t\t", shortened_string_tabs = "\t\t\t";
             for (int group = 0; group < participant_groups.Length; group++)
             {

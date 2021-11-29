@@ -187,6 +187,7 @@ namespace ConsoleApplication1
     {
         static void Main(string[] args)
         {
+            string table_name = "Student groups - GPA rating";
             Student[] students = new Student[6];
             students[0] = new Student("Oleg", "Styopovich", "BPM-21-1", new float[] {3.3F, 3.5F, 3.7F});
             students[1] = new Student("Kot", "Artyomovich", "BPM-21-1", new float[] {2, 4.4F, 3.7F});
@@ -198,7 +199,7 @@ namespace ConsoleApplication1
             sortStudentsByGroup(ref student_groups, students);
             sortGroupsByAverageGPA(ref student_groups);
             sortGrouppedStudentsByGPA(ref student_groups);
-            printStudentsByGroup(student_groups);
+            printTableOfStudentsByGroup(student_groups, table_name);
         }
         static void sortGrouppedStudentsByGPA(ref StudentGroup[] student_groups)
         {
@@ -255,8 +256,9 @@ namespace ConsoleApplication1
                 }
             }
         }
-        static void printStudentsByGroup(StudentGroup[] student_groups)
+        static void printTableOfStudentsByGroup(StudentGroup[] student_groups, string table_title)
         {
+            Console.WriteLine($"{table_title}\n");
             string entry_tabs = "\t\t", shortened_string_tabs = "\t\t\t";
             for (int group = 0; group < student_groups.Length; group++)
             {
