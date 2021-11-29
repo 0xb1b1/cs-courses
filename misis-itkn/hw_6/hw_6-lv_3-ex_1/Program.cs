@@ -3,12 +3,14 @@ namespace ConsoleApplication1
 {
     struct Student
     {
-        private string name, group;
+        private string first_name, last_name, full_name, group;
         private float gpa = 0;
         private float[] grades;
-        public Student(string name, string group, float[] grades)
+        public Student(string first_name, string last_name, string group, float[] grades)
         {
-            this.name = name;
+            this.first_name = first_name;
+            this.last_name = last_name;
+            this.full_name = $"{first_name} {last_name}";
             this.group = group;
             this.grades = grades;
             this.CalculateGPA();
@@ -37,13 +39,33 @@ namespace ConsoleApplication1
         {
             return this.gpa;
         }
-        public void SetName(string name)
+        public void SetFullName(string first_name, string last_name)
         {
-            this.name = name;
+            this.first_name = first_name;
+            this.last_name = last_name;
+            this.full_name = $"{first_name} {last_name}";
         }
-        public string GetName()
+        public void SetFirstName(string first_name)
         {
-            return this.name;
+            this.first_name = first_name;
+            this.full_name = $"{first_name} {this.last_name}";
+        }
+        public void SetLastName(string last_name)
+        {
+            this.last_name = last_name;
+            this.full_name = $"{this.first_name} {last_name}";
+        }
+        public string GetFullName()
+        {
+            return this.full_name;
+        }
+        public string GetFirstName()
+        {
+            return this.first_name;
+        }
+        public string GetLastName()
+        {
+            return this.last_name;
         }
         public void SetGroupName(string group)
         {
@@ -137,12 +159,13 @@ namespace ConsoleApplication1
     {
         static void Main(string[] args)
         {
-            Student[] students = new Student[5];
-            students[0] = new Student("Oleg Bluntovich", "BPM-21-1", new float[] {3.3F, 3.5F, 3.7F});
-            students[1] = new Student("Kot Kotovich", "BPM-21-1", new float[] {2, 4.4F, 3.7F});
-            students[2] = new Student("Will Williams", "BPM-21-3", new float[] {4.1F, 4, 3.9F});
-            students[3] = new Student("Xandra Uwu", "BPM-21-2", new float[] {3.3F, 2.3F, 4.6F});
-            students[4] = new Student("Axel Abobovich", "BPM-21-2", new float[] {2.5F, 4.4F, 4.1F});
+            Student[] students = new Student[6];
+            students[0] = new Student("Oleg", "Styopovich", "BPM-21-1", new float[] {3.3F, 3.5F, 3.7F});
+            students[1] = new Student("Kot", "Artyomovich", "BPM-21-1", new float[] {2, 4.4F, 3.7F});
+            students[2] = new Student("Anya", "Ahhhhhh", "BPM-21-3", new float[] {4.1F, 4, 3.9F});
+            students[3] = new Student("Galina", "Kry'nya", "BPM-21-2", new float[] {3.3F, 2.3F, 4.6F});
+            students[4] = new Student("Excel", "Breightnbikher", "BPM-21-2", new float[] {2.5F, 4.4F, 4.1F});
+            students[5] = new Student("Tema", "Claudrepovich", "BPM-21-1", new float[] {2.2F, 4.7F, 3.99F});
             StudentGroup[] student_groups = new StudentGroup[listGroups(students).Length];
             sortStudentsByGroup(ref student_groups, students);
             sortGroupsByAverageGPA(ref student_groups);
@@ -206,13 +229,14 @@ namespace ConsoleApplication1
         }
         static void printStudentsByGroup(StudentGroup[] student_groups)
         {
+            string entry_tabs = "\t\t", shortened_string_tabs = "\t\t\t";
             for (int group = 0; group < student_groups.Length; group++)
             {
-                Console.WriteLine($"Group {student_groups[group].GetGroupName()}\tAverage GPA: {student_groups[group].GetAverageGPA()}");
-                Console.WriteLine("Student\t\tGPA");
+                Console.WriteLine($"Group {student_groups[group].GetGroupName()}{entry_tabs}Average GPA: {student_groups[group].GetAverageGPA()}");
+                Console.WriteLine($"Student{shortened_string_tabs}GPA");
                 for (int student = 0; student < student_groups[group].GetStudents().Length; student++)
                 {
-                    Console.WriteLine($"{student_groups[group].GetStudents()[student].GetName()}\t{student_groups[group].GetStudents()[student].GetGPA()}");
+                    Console.WriteLine($"{student_groups[group].GetStudents()[student].GetFullName()}{entry_tabs}{student_groups[group].GetStudents()[student].GetGPA()}");
                 }
                 Console.WriteLine();
             }
