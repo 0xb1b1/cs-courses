@@ -81,30 +81,30 @@ namespace ConsoleApplication1
     {
         private Student[] students;
         private string group_name = "";
-        private int students_count = 0;
+        private int student_count = 0;
         private float average_gpa = 0;
         public StudentGroup(Student[] students)
         {
             this.students = students;
-            this.students_count = students.Length;
+            this.student_count = students.Length;
         }
         public void AddStudent(Student student)
         {
-            Student[] new_students = new Student[this.students_count + 1];
-            for (int i = 0; i < this.students_count; i++)
+            Student[] new_students = new Student[this.student_count + 1];
+            for (int i = 0; i < this.student_count; i++)
             {
                 new_students[i] = this.students[i];
             }
-            new_students[this.students_count] = student;
+            new_students[this.student_count] = student;
             this.students = new_students;
-            this.students_count++;
+            this.student_count++;
             CalculateAverageGPA();
         }
         public void RemoveStudent(string full_name)
         {
-            Student[] new_students = new Student[this.students_count - 1];
+            Student[] new_students = new Student[this.student_count - 1];
             int index = 0;
-            for (int i = 0; i < this.students_count; i++)
+            for (int i = 0; i < this.student_count; i++)
             {
                 if (this.students[i].GetFullName() != full_name)
                 {
@@ -113,19 +113,19 @@ namespace ConsoleApplication1
                 }
             }
             this.students = new_students;
-            this.students_count--;
+            this.student_count--;
             CalculateAverageGPA();
         }
         public void SortByGPA()
         {
-            Student[] new_students = new Student[this.students_count];
-            for (int i = 0; i < this.students_count; i++)
+            Student[] new_students = new Student[this.student_count];
+            for (int i = 0; i < this.student_count; i++)
             {
                 new_students[i] = this.students[i];
             }
-            for (int i = 0; i < this.students_count; i++)
+            for (int i = 0; i < this.student_count; i++)
             {
-                for (int j = 0; j < this.students_count - 1; j++)
+                for (int j = 0; j < this.student_count - 1; j++)
                 {
                     if (new_students[j].GetGPA() < new_students[j + 1].GetGPA())
                     {
@@ -140,11 +140,11 @@ namespace ConsoleApplication1
         public void CalculateAverageGPA()
         {
             float gpa_sum = 0;
-            for (int i = 0; i < this.students_count; i++)
+            for (int i = 0; i < this.student_count; i++)
             {
                 gpa_sum += this.students[i].GetGPA();
             }
-            this.average_gpa = gpa_sum / this.students_count;
+            this.average_gpa = gpa_sum / this.student_count;
         }
         public float GetAverageGPA()
         {
@@ -164,7 +164,7 @@ namespace ConsoleApplication1
         }
         public void AddStudentGrade(string student_full_name, float grade)
         {
-            for (int i = 0; i < this.students_count; i++)
+            for (int i = 0; i < this.student_count; i++)
             {
                 if (this.students[i].GetFullName() == student_full_name)
                 {
@@ -174,7 +174,7 @@ namespace ConsoleApplication1
         }
         public void SetStudentGrades(string student_full_name, float[] grades)
         {
-            for (int i = 0; i < this.students_count; i++)
+            for (int i = 0; i < this.student_count; i++)
             {
                 if (this.students[i].GetFullName() == student_full_name)
                 {
