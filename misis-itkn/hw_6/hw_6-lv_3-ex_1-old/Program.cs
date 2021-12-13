@@ -39,9 +39,37 @@ namespace ConsoleApplication1
         {
             return this.gpa;
         }
+        public void SetFullName(string first_name, string last_name)
+        {
+            this.first_name = first_name;
+            this.last_name = last_name;
+            this.full_name = $"{first_name} {last_name}";
+        }
+        public void SetFirstName(string first_name)
+        {
+            this.first_name = first_name;
+            this.full_name = $"{first_name} {this.last_name}";
+        }
+        public void SetLastName(string last_name)
+        {
+            this.last_name = last_name;
+            this.full_name = $"{this.first_name} {last_name}";
+        }
         public string GetFullName()
         {
             return this.full_name;
+        }
+        public string GetFirstName()
+        {
+            return this.first_name;
+        }
+        public string GetLastName()
+        {
+            return this.last_name;
+        }
+        public void SetGroupName(string group)
+        {
+            this.group = group;
         }
         public string GetGroupName()
         {
@@ -70,6 +98,22 @@ namespace ConsoleApplication1
             new_students[this.student_count] = student;
             this.students = new_students;
             this.student_count++;
+            CalculateAverageGPA();
+        }
+        public void RemoveStudent(string full_name)
+        {
+            Student[] new_students = new Student[this.student_count - 1];
+            int index = 0;
+            for (int i = 0; i < this.student_count; i++)
+            {
+                if (this.students[i].GetFullName() != full_name)
+                {
+                    new_students[index] = this.students[i];
+                    index++;
+                }
+            }
+            this.students = new_students;
+            this.student_count--;
             CalculateAverageGPA();
         }
         public void SortByGPA()
@@ -117,6 +161,26 @@ namespace ConsoleApplication1
         public void SetGroupName(string group_name)
         {
             this.group_name = group_name;
+        }
+        public void AddStudentGrade(string student_full_name, float grade)
+        {
+            for (int i = 0; i < this.student_count; i++)
+            {
+                if (this.students[i].GetFullName() == student_full_name)
+                {
+                    this.students[i].AddGrade(grade);
+                }
+            }
+        }
+        public void SetStudentGrades(string student_full_name, float[] grades)
+        {
+            for (int i = 0; i < this.student_count; i++)
+            {
+                if (this.students[i].GetFullName() == student_full_name)
+                {
+                    this.students[i].SetGrades(grades);
+                }
+            }
         }
     }
     class Program

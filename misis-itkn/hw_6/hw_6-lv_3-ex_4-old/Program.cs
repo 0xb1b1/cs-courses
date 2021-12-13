@@ -13,13 +13,45 @@ namespace ConsoleApplication1
             this.group = group;
             this.score = score;
         }
+        public void SetScore(float score)
+        {
+            this.score = score;
+        }
         public float GetScore()
         {
             return this.score;
         }
+        public void SetFullName(string first_name, string last_name)
+        {
+            this.first_name = first_name;
+            this.last_name = last_name;
+            this.full_name = $"{first_name} {last_name}";
+        }
+        public void SetFirstName(string first_name)
+        {
+            this.first_name = first_name;
+            this.full_name = $"{first_name} {this.last_name}";
+        }
+        public void SetLastName(string last_name)
+        {
+            this.last_name = last_name;
+            this.full_name = $"{this.first_name} {last_name}";
+        }
         public string GetFullName()
         {
             return this.full_name;
+        }
+        public string GetFirstName()
+        {
+            return this.first_name;
+        }
+        public string GetLastName()
+        {
+            return this.last_name;
+        }
+        public void SetGroupName(string group)
+        {
+            this.group = group;
         }
         public string GetGroupName()
         {
@@ -49,6 +81,22 @@ namespace ConsoleApplication1
             new_participants[this.participant_count] = participant;
             this.participants = new_participants;
             this.participant_count++;
+            CalculateAverageScore();
+        }
+        public void RemoveParticipant(string full_name)
+        {
+            Participant[] new_students = new Participant[this.participant_count - 1];
+            int index = 0;
+            for (int i = 0; i < this.participant_count; i++)
+            {
+                if (this.participants[i].GetFullName() != full_name)
+                {
+                    new_students[index] = this.participants[i];
+                    index++;
+                }
+            }
+            this.participants = new_students;
+            this.participant_count--;
             CalculateAverageScore();
         }
         public void SortByScore()
@@ -97,10 +145,6 @@ namespace ConsoleApplication1
         {
             this.group_name = group_name;
         }
-        public int GetParitipantCount()
-        {
-            return this.participant_count;
-        }
     }
     class Program
     {
@@ -118,7 +162,7 @@ namespace ConsoleApplication1
             sortStudentsByGroup(ref participant_groups, participants);
             sortGroupsByAverageGPA(ref participant_groups);
             sortGrouppedParticipantsByScore(ref participant_groups);
-            printTableOfParticipants(participant_groups, table_title);
+            printTableOfParticipantsByGroup(participant_groups, table_title);
         }
         static void sortGrouppedParticipantsByScore(ref ParticipantGroup[] participant_groups)
         {
@@ -175,37 +219,20 @@ namespace ConsoleApplication1
                 }
             }
         }
-        static Participant[] mergeParticipantGroups(ParticipantGroup[] participant_groups)
+        static void printTableOfParticipantsByGroup(ParticipantGroup[] participant_groups, string table_title)
         {
-            int participant_count = 0;
-            for (int participant_group = 0; participant_group < participant_groups.Length; participant_group++)
-            {
-                participant_count += participant_groups[participant_group].GetParitipantCount();
-            }
-            Participant[] participants = new Participant[participant_count];
-            int participant_index = 0;
-            for (int i = 0; i < participant_groups.Length; i++)
-            {
-                Participant[] group_participants = participant_groups[i].GetStudents();
-                for (int j = 0; j < group_participants.Length; j++)
-                {
-                    participants[participant_index] = group_participants[j];
-                    participant_index++;
-                }
-            }
-            return participants;
-        }
-        static void printTableOfParticipants(ParticipantGroup[] participant_groups, string table_title)
-        {
-            Participant[] participants = mergeParticipantGroups(participant_groups);
             Console.WriteLine($"{table_title}\n");
             string entry_tabs = "\t\t", shortened_string_tabs = "\t\t\t";
-            Console.WriteLine($"Participant{shortened_string_tabs}GPA{shortened_string_tabs}Group");
-            for (int participant = 0; participant < participants.Length; participant++)
+            for (int group = 0; group < participant_groups.Length; group++)
             {
-                Console.WriteLine($"{participants[participant].GetFullName()}{entry_tabs}{participants[participant].GetScore()}{entry_tabs}{participants[participant].GetGroupName()}");
+                Console.WriteLine($"Group {participant_groups[group].GetGroupName()}{entry_tabs}Average GPA: {participant_groups[group].GetAverageScore()}");
+                Console.WriteLine($"Participant{shortened_string_tabs}GPA");
+                for (int participant = 0; participant < participant_groups[group].GetStudents().Length; participant++)
+                {
+                    Console.WriteLine($"{participant_groups[group].GetStudents()[participant].GetFullName()}{entry_tabs}{participant_groups[group].GetStudents()[participant].GetScore()}");
+                }
+                Console.WriteLine();
             }
-            Console.WriteLine();
         }
     }
 }
