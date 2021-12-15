@@ -7,7 +7,7 @@ namespace ConsoleApplication1
     {
         public static class SortArray
         {
-            public static void ByIncreasingValue(ref int[] array)
+            public static int[] ByIncreasingValue(int[] array)
             {
                 int temp;
                 for (int i = 0; i < array.Length; i++)
@@ -22,8 +22,9 @@ namespace ConsoleApplication1
                         }
                     }
                 }
+                return array;
             }
-            public static void ByDecreasingValue(ref int[] array)
+            public static int[] ByDecreasingValue(int[] array)
             {
                 int temp;
                 for (int i = 0; i < array.Length; i++)
@@ -38,9 +39,10 @@ namespace ConsoleApplication1
                         }
                     }
                 }
+                return array;
             }
         }
-        delegate void ReorderMatrixDecreasing(ref int[] array);
+        delegate int[] ReorderMatrixDecreasing(int[] array);
         static ReorderMatrixDecreasing sort_decreasing = SortArray.ByDecreasingValue;
         static ReorderMatrixDecreasing sort_increasing = SortArray.ByIncreasingValue;
         
@@ -55,21 +57,31 @@ namespace ConsoleApplication1
                                         };
             Console.WriteLine("Input:");
             outputIndentedMatrix(matrix_0);
-            reorderMatrixByIndex(ref matrix_0);
+            for (int row = 0; row < matrix_0.GetLength(0); row++)
+            {
+                switch(row % 2)
+                {
+                    case 0:
+                        reorderMatrixRowByIndex(ref matrix_0, row, sort_increasing);
+                        break;
+                    case 1:
+                        reorderMatrixRowByIndex(ref matrix_0, row, sort_decreasing);
+                        break;
+                }
+            }
             Console.WriteLine("Output:");
             outputIndentedMatrix(matrix_0);
         }
-        static void reorderMatrixByIndex(ref int[,] matrix)
+        static void reorderMatrixRowByIndex(ref int[,] matrix, int row, ReorderMatrixDecreasing sort)
         {
-            for(int i = 0; i < matrix.GetLength(0); i++) {
-                int[] row = new int[matrix.GetLength(1)];
-                initializeMatrixRowArray(ref matrix, ref row, i);
-                if(i % 2 == 0) sort_increasing(ref row);
-                else sort_decreasing(ref row);
-                plugRowIntoMatrix(ref matrix, ref row, i);
+            int[] row_local = new int[matrix.GetLength(1)];
+            for (int col = 0; col < matrix.GetLength(1); col++)
+            {
+                row_local[col] = matrix[row, col];
             }
+            plugRowIntoMatrix(ref matrix, sort(row_local), row);
         }
-        static void plugRowIntoMatrix(ref int[,] matrix, ref int[] row, int row_index)
+        static void plugRowIntoMatrix(ref int[,] matrix, int[] row, int row_index)
         {
             for (int i = 0; i < row.Length; i++)
             {
@@ -98,3 +110,4 @@ namespace ConsoleApplication1
         }
     }
 }
+

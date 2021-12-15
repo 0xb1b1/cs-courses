@@ -19,41 +19,37 @@ namespace ConsoleApplication1
                                         };
             Console.WriteLine("Input:");
             outputArrays(array_0, array_1);
-            SwapMaxNumsInArrays(ref array_0, ref array_1);
+            SwapMaxNumsInMatrices(ref array_0, ref array_1);
             Console.WriteLine("Output:");
             outputArrays(array_0, array_1);
         }
-        static void SwapMaxNumsInArrays(ref int[,] array_0, ref int[,] array_1)
+        static int[] findMaxNumInMatrix(int[,] matrix_0)
         {
-            int max_0 = array_0[0, 0], max_1 = array_1[0, 0];
-            int[] max_0_index = new int[2], max_1_index = new int[2];
-            for (int row = 0; row < array_0.GetLength(0); row++)
+            int[] max_num = new int[3];
+            max_num[0] = matrix_0[0, 0];
+            max_num[1] = 0;
+            for (int i = 0; i < matrix_0.GetLength(0); i++)
             {
-                for (int column = 0; column < array_0.GetLength(1); column++)
+                for (int j = 0; j < matrix_0.GetLength(1); j++)
                 {
-                    if (array_0[row, column] > max_0)
+                    if (matrix_0[i, j] > max_num[0])
                     {
-                        max_0 = array_0[row, column];
-                        max_0_index[0] = row;
-                        max_0_index[1] = column;
+                        max_num[0] = matrix_0[i, j];
+                        max_num[1] = i;
+                        max_num[2] = j;
                     }
                 }
             }
-            for (int row = 0; row < array_1.GetLength(0); row++)
-            {
-                for (int column = 0; column < array_1.GetLength(1); column++)
-                {
-                    if (array_1[row, column] > max_1)
-                    {
-                        max_1 = array_1[row, column];
-                        max_1_index[0] = row;
-                        max_1_index[1] = column;
-                    }
-                }
-            }
-            separator(); Console.WriteLine($"Max num in array_0: {max_0}, max num in array_1: {max_1}"); separator();
-            array_0[max_0_index[0], max_0_index[1]] = max_1;
-            array_1[max_1_index[0], max_1_index[1]] = max_0;
+            return max_num;
+        }
+        static void SwapMaxNumsInMatrices(ref int[,] array_0, ref int[,] array_1)
+        {
+            int[] max_0_index = findMaxNumInMatrix(array_0);
+            int[] max_1_index = findMaxNumInMatrix(array_1);
+
+            separator(); Console.WriteLine($"Max num in array_0: {max_0_index[0]}, max num in array_1: {max_1_index[0]}"); separator();
+            array_0[max_0_index[1], max_0_index[2]] = max_1_index[0];
+            array_1[max_1_index[1], max_1_index[2]] = max_0_index[0];
         }
         static void outputIndentedArray(int[,] array)
         {
@@ -81,3 +77,4 @@ namespace ConsoleApplication1
         }
     }
 }
+
