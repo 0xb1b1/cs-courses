@@ -43,9 +43,9 @@ namespace ConsoleApplication1
         static void Main(string[] args)
         {
             Student[] students = new Student[6];
-            students[0] = new Student("Oleg Styopovich", new float[] {3.3F, 2, 3.7F});
-            students[1] = new Student("Kot Kotovich", new float[] {2, 4.4F, 3.7F});
-            students[2] = new Student("Sergey MkUltramarine", new float[] {4.1F, 4, 3.9F});
+            students[0] = new Student("Oleg Styopovich", new float[] {4, 2, 4});
+            students[1] = new Student("Kot Kotovich", new float[] {2, 2, 3});
+            students[2] = new Student("Sergey MkUltramarine", new float[] {4, 4, 3});
             students[3] = new Student("Uwu owO", new float[] {3.3F, 4.4F, 2.1F});
             students[4] = new Student("Pig Puggovich", new float[] {2.112F, 3.1F, 3.43F});
             students[5] = new Student("Test Guinea", new float[] {2, 4.4F, 3.7F});

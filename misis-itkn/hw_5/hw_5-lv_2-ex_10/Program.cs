@@ -6,7 +6,7 @@ namespace ConsoleApplication1
         static void Main(string[] args)
         {
             int[,] matrix_0 = new int[6, 6] {
-                                        {1,69,2,3,4,5},
+                                        {1,-69,2,3,4,5},
                                         {2,3,4,2,3,1},
                                         {3,1,54,5,4,2},
                                         {4,3,2,2,8,5},
@@ -37,7 +37,7 @@ namespace ConsoleApplication1
 	}
 	static int findSmallestMatrixElementColumnAboveMainDiagonal(int[,] matrix)
         {
-            int smallest_number = matrix[0,1], smallest_number_column = 0;
+            int smallest_number = matrix[0,1], smallest_number_column = 1;
             for (int row = 0; row < matrix.GetLength(0); row++)
             {
                 for (int column = row + 1; column < matrix.GetLength(1); column++)
