@@ -41,19 +41,30 @@ namespace ConsoleApplication1
             sortParticipantGroup(ref participants_grp_1);
             Console.WriteLine(table_title);
 
-            int index = 0;
+            // sort and place all values from participants_grp_0 and participants_grp_1 into the final array
             Participant[] final_array = new Participant[participants_grp_1.Length + participants_grp_0.Length];
-            for (int i = 0; i < participants_grp_0.Length; i++)
+            int i = 0, j = 0, k = 0;
+            int n1 = participants_grp_0.Length, n2 = participants_grp_1.Length;
+            while (i < n1 && j < n2)
             {
-                final_array[index] = participants_grp_0[i];
-                index++;
+                if (participants_grp_0[i].GetScore() > participants_grp_1[j].GetScore())
+                {
+                    final_array[k++] = participants_grp_0[i++];
+                }
+                else
+                {
+                    final_array[k++] = participants_grp_1[j++];
+                }
             }
-            for (int i = 0; i < participants_grp_1.Length; i++)
+            while (i < n1)
             {
-                final_array[index] = participants_grp_1[i];
-                index++;
+                final_array[k++] = participants_grp_0[i++];
             }
-            // SORT PROPERLY
+            while (j < n2)
+            {
+                final_array[k++] = participants_grp_1[j++];
+            }
+
             Console.WriteLine("Groups:");
             printGroup(final_array);
         }
