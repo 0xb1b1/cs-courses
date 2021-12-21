@@ -33,23 +33,17 @@ namespace ConsoleApplication1
     }
     class Participant : Person
     {
-        private string group;
         private float score;
-        public Participant(string first_name, string last_name, string group, float score)
+        public Participant(string first_name, string last_name, float score)
         {
             this.first_name = first_name;
             this.last_name = last_name;
             this.full_name = $"{first_name} {last_name}";
-            this.group = group;
             this.score = score;
         }
         public float GetScore()
         {
             return this.score;
-        }
-        public string GetGroupName()
-        {
-            return this.group;
         }
     }
 
@@ -114,105 +108,68 @@ namespace ConsoleApplication1
         static void Main(string[] args)
         {
             string table_title = "Ski race results";
-            Participant[] participants = new Participant[6];
-            participants[0] = new Participant("Oleg", "Styopovich", "CloudBusters", 5.4F);
-            participants[1] = new Participant("Kot", "Artyomovich", "CloudBusters", 6.3F);
-            participants[2] = new Participant("Anya", "Ahhhhhh", "BluntFinders", 7);
-            participants[3] = new Participant("Galina", "Kry'nya", "CloudBusters", 8.4F);
-            participants[4] = new Participant("Excel", "Breightnbikher", "BluntFinders", 4.99F);
-            participants[5] = new Participant("Tema", "Claudrepovich", "BluntFinders", 5.3F);
-            ParticipantGroup[] participant_groups = new ParticipantGroup[listGroups(participants).Length];
-            sortStudentsByGroup(ref participant_groups, participants);
-            sortGroupsByAverageGPA(ref participant_groups);
-            sortGrouppedParticipantsByScore(ref participant_groups);
-            printTableOfParticipants(participant_groups, table_title);
-        }
-        static void sortGrouppedParticipantsByScore(ref ParticipantGroup[] participant_groups)
-        {
-            for (int group = 0; group < participant_groups.Length; group++)
+            Participant[] participants_grp_0 = new Participant[3];
+            Participant[] participants_grp_1 = new Participant[3];
+            // group 0
+            participants_grp_0[0] = new Participant("Oleg", "Styopovich", 5.4F);
+            participants_grp_0[1] = new Participant("Kot", "Artyomovich", 6.3F);
+            participants_grp_0[2] = new Participant("Galina", "Kry'nya", 8.4F);
+            // group 1
+            participants_grp_1[0] = new Participant("Anya", "Ahhhhhh", 7);
+            participants_grp_1[1] = new Participant("Excel", "Breightnbikher",4.99F);
+            participants_grp_1[2] = new Participant("Tema", "Claudrepovich", 5.3F);
+            sortParticipantGroup(ref participants_grp_0);
+            sortParticipantGroup(ref participants_grp_1);
+            Console.WriteLine(table_title);
+
+            // sort and place all values from participants_grp_0 and participants_grp_1 into the final array
+            Participant[] final_array = new Participant[participants_grp_1.Length + participants_grp_0.Length];
+            int i = 0, j = 0, k = 0;
+            int n1 = participants_grp_0.Length, n2 = participants_grp_1.Length;
+            while (i < n1 && j < n2)
             {
-                participant_groups[group].SortByScore();
-            }
-        }
-        static string[] listGroups(Participant[] participants) {
-            string[] groups = new string[participants.Length];
-            int group_amount = 0;
-            for (int i = 0; i < participants.Length; i++)
-            {
-                if (!groups.Contains(participants[i].GetGroupName()))
+                if (participants_grp_0[i].GetScore() > participants_grp_1[j].GetScore())
                 {
-                    groups[group_amount] = participants[i].GetGroupName();
-                    group_amount++;
+                    final_array[k++] = participants_grp_0[i++];
+                }
+                else
+                {
+                    final_array[k++] = participants_grp_1[j++];
                 }
             }
-            string[] new_groups = new string[group_amount];
-            for (int i = 0; i < group_amount; i++)
+            while (i < n1)
             {
-                new_groups[i] = groups[i];
+                final_array[k++] = participants_grp_0[i++];
             }
-            return new_groups;
-        }
-        static void sortGroupsByAverageGPA(ref ParticipantGroup[] groups)
-        {
-            for (int i = 0; i < groups.Length; i++)
+            while (j < n2)
             {
-                for (int j = 0; j < groups.Length - 1; j++)
+                final_array[k++] = participants_grp_1[j++];
+            }
+
+            Console.WriteLine("Groups:");
+            printGroup(final_array);
+        }
+        static void sortParticipantGroup(ref Participant[] participant_group)
+        {
+            for (int i = 0; i < participant_group.Length; i++)
+            {
+                for (int j = i + 1; j < participant_group.Length; j++)
                 {
-                    if (groups[j].GetAverageScore() < groups[j + 1].GetAverageScore())
+                    if (participant_group[i].GetScore() < participant_group[j].GetScore())
                     {
-                        ParticipantGroup temp = groups[j];
-                        groups[j] = groups[j + 1];
-                        groups[j + 1] = temp;
+                        Participant temp = participant_group[i];
+                        participant_group[i] = participant_group[j];
+                        participant_group[j] = temp;
                     }
                 }
             }
         }
-        static void sortStudentsByGroup(ref ParticipantGroup[] participant_groups, Participant[] participants) {
-            string[] groups = listGroups(participants);
-            for (int group = 0; group < groups.Length; group++)
-            {
-                participant_groups[group] = new ParticipantGroup(new Participant[0]);
-                participant_groups[group].SetGroupName(groups[group]);
-                for (int participant = 0; participant < participants.Length; participant++)
-                {
-                    if (participant_groups[group].GetGroupName() == participants[participant].GetGroupName())
-                    {
-                        participant_groups[group].AddParticipant(participants[participant]);
-                    }
-                }
-            }
-        }
-        static Participant[] mergeParticipantGroups(ParticipantGroup[] participant_groups)
+        static void printGroup(Participant[] participant_group)
         {
-            int participant_count = 0;
-            for (int participant_group = 0; participant_group < participant_groups.Length; participant_group++)
+            for (int i = 0; i < participant_group.Length; i++)
             {
-                participant_count += participant_groups[participant_group].GetParitipantCount();
+                Console.WriteLine($"{participant_group[i].GetFullName()} - {participant_group[i].GetScore()}");
             }
-            Participant[] participants = new Participant[participant_count];
-            int participant_index = 0;
-            for (int i = 0; i < participant_groups.Length; i++)
-            {
-                Participant[] group_participants = participant_groups[i].GetStudents();
-                for (int j = 0; j < group_participants.Length; j++)
-                {
-                    participants[participant_index] = group_participants[j];
-                    participant_index++;
-                }
-            }
-            return participants;
-        }
-        static void printTableOfParticipants(ParticipantGroup[] participant_groups, string table_title)
-        {
-            Participant[] participants = mergeParticipantGroups(participant_groups);
-            Console.WriteLine($"{table_title}\n");
-            string entry_tabs = "\t\t", shortened_string_tabs = "\t\t\t";
-            Console.WriteLine($"Participant{shortened_string_tabs}GPA{shortened_string_tabs}Group");
-            for (int participant = 0; participant < participants.Length; participant++)
-            {
-                Console.WriteLine($"{participants[participant].GetFullName()}{entry_tabs}{participants[participant].GetScore()}{entry_tabs}{participants[participant].GetGroupName()}");
-            }
-            Console.WriteLine();
         }
     }
 }
