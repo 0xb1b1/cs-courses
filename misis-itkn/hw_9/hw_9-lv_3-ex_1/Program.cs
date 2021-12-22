@@ -133,15 +133,34 @@ namespace ConsoleApplication1
             sortStudentsByGroup(ref student_groups, students);
             sortGroupsByAverageGPA(ref student_groups);
             sortGrouppedStudentsByGPA(ref student_groups);
-            printTableOfStudentsByGroup(student_groups, table_name);
+            Console.WriteLine(getTableOfStudentsByGroup(student_groups, table_name));
+            Console.Write("\nSave the list in a file (y/N): ");
+            string answer = Console.ReadLine();
+            Console.WriteLine();
+            if (answer == "y" || answer == "Y")
+            {
+                Console.Write("Enter a file name: ");
+                string filename_out = Console.ReadLine();
+                saveToFile(students, student_groups, table_name, filename_out);
+            }
+            Console.WriteLine("\nHave a good day!");
         }
-        static void saveToFile(Student[] array, string output_filename)
+        static void saveToFile(Student[] students, StudentGroup[] student_groups, string table_name, string output_filename)
         {
             StreamWriter sw = new StreamWriter(output_filename);
-            for (int i = 0; i < array.Length; i++)
+            sw.WriteLine("Students:");
+            for (int i = 0; i < students.Length; i++)
             {
-                sw.WriteLine($"{array[i].GetFullName()} {array[i].GetGPA()}");
+                sw.WriteLine($"{students[i].GetFullName()} {students[i].GetGroupName()} {students[i].GetGPA()}");
+                
             }
+            sw.WriteLine("\nGroups:");
+            for (int i = 0; i < student_groups.Length; i++)
+            {
+                sw.WriteLine($"{student_groups[i].GetGroupName()} {student_groups[i].GetAverageGPA()}");
+            }
+            sw.WriteLine("\nProgram output:");
+            sw.WriteLine(getTableOfStudentsByGroup(student_groups, table_name));
             sw.Close();
         }
         static Student[] parseInputFile(string path)
@@ -220,20 +239,21 @@ namespace ConsoleApplication1
                 }
             }
         }
-        static void printTableOfStudentsByGroup(StudentGroup[] student_groups, string table_title)
+        static string getTableOfStudentsByGroup(StudentGroup[] student_groups, string table_title)
         {
-            Console.WriteLine($"{table_title}\n");
+            string output = "";
+            output += $"{table_title}\n";
             string entry_tabs = "\t\t", shortened_string_tabs = "\t\t\t";
             for (int group = 0; group < student_groups.Length; group++)
             {
-                Console.WriteLine($"Group {student_groups[group].GetGroupName()}{entry_tabs}Average GPA: {student_groups[group].GetAverageGPA()}");
-                Console.WriteLine($"Student{shortened_string_tabs}GPA");
+                output +=  $"\nGroup {student_groups[group].GetGroupName()}{entry_tabs}Average GPA: {student_groups[group].GetAverageGPA()}\n";
+                output += $"Student{shortened_string_tabs}GPA\n";
                 for (int student = 0; student < student_groups[group].GetStudents().Length; student++)
                 {
-                    Console.WriteLine($"{student_groups[group].GetStudents()[student].GetFullName()}{entry_tabs}{student_groups[group].GetStudents()[student].GetGPA()}");
+                    output += $"{student_groups[group].GetStudents()[student].GetFullName()}{entry_tabs}{student_groups[group].GetStudents()[student].GetGPA()}\n";
                 }
-                Console.WriteLine();
             }
+            return output;
         }
     }
 }
