@@ -156,10 +156,10 @@ namespace ConsoleApplication1
             StreamReader sr = new StreamReader(path);   // Open the input file in read-only mode
             Student[] students = new Student[lines_count]; // Create a 2D array to sort students by groups
             // Parse the input file line by line
-            int current_student = 0;
+            int current_student = 0;    // Current student index
             while ((line = sr.ReadLine()) != null)
             {
-                string[] words = line.Split(' ');Console.WriteLine(words[0], words[1], words[2], float.Parse(words[3]), float.Parse(words[4]), float.Parse(words[5]), float.Parse(words[6]), float.Parse(words[7]));
+                string[] words = line.Split(' ');   // Split the line by spaces before parsing it
                 students[current_student] = new Student(words[0], words[1], words[2], new float[] { float.Parse(words[3]), float.Parse(words[4]), float.Parse(words[5]), float.Parse(words[6]), float.Parse(words[7]) });
                 current_student++;
             }
