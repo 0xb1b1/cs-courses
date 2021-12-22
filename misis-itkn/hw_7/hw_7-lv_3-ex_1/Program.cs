@@ -49,12 +49,6 @@ namespace ConsoleApplication1
             this.grades = grades;
             this.CalculateGPA();
         }
-        public void AddGrade(float grade)
-        {
-            Array.Resize(ref this.grades, this.grades.Length + 1);
-            this.grades[this.grades.Length - 1] = grade;
-            this.CalculateGPA();
-        }
         public float GetGPA()
         {
             return this.gpa;

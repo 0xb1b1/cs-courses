@@ -16,7 +16,7 @@ namespace ConsoleApplication1
         public Participant[] participants = new Participant[0];
         public string group_name = "";
         public int participant_count = 0;
-        public Participant[] GetStudents()
+        public Participant[] GetParticipants()
         {
             return this.participants;
         }
@@ -110,31 +110,42 @@ namespace ConsoleApplication1
         static void Main(string[] args)
         {
             string table_title = "Ski race results";
-            int group_amount = 2;
-            Participant[,] participant_groups = parseInputFile(@"C:\Users\voxel\git\cs-courses\misis-itkn\hw_9\hw_9-lv_3-ex_4\participants.list", group_amount);
+            string input_file_path = "participants.list";   // Should be located in the project's root directory
+            /* INPUT FILE FORMAT
+
+                <amount of groups>
+                <amount of partitipants in the first group>
+                <participant>[participant's full name] [participant's score]</participant>
+                ...
+                <amount of partitipants in the second group>
+                <participant>[participant's full name] [participant's score]</participant>
+                ...%
+
+            */
+            Participant[,] participant_groups = parseInputFile(input_file_path);
             Participant[] participants_grp_0 = new Participant[3];
-            Participant[] participants_grp_1 = new Participant[3];Console.WriteLine("DEBUG LINE 0"); Console.WriteLine($"GROUP AMOUNT PARSED {participant_groups.GetLength(0)}");
+            Participant[] participants_grp_1 = new Participant[3];
             for (int group = 0; group < participant_groups.GetLength(0); group++)
             {
                 int current_group_participant = 0;
                 while (participant_groups[group, current_group_participant] != null)
-                { Console.WriteLine("DEBUG LINE 1"); Console.WriteLine($"Group: {group} Current member No: {current_group_participant}");Console.WriteLine("DEBUG LINE 2");
+                {
                     if (group == 0)
-                    {Console.WriteLine($"Added {participant_groups[group, current_group_participant].GetFullName()} to grp 0");
+                    {
                         participants_grp_0[current_group_participant] = participant_groups[group, current_group_participant];
                     }
                     else
-                    {Console.WriteLine($"Added {participant_groups[group, current_group_participant].GetFullName()} to grp 1");
+                    {
                         participants_grp_1[current_group_participant] = participant_groups[group, current_group_participant];
                     }
                     current_group_participant++;
                 }
-            }Console.WriteLine($"{participants_grp_0.Length} {participants_grp_1.Length}\n{participants_grp_0[1].GetFullName()} {participants_grp_0[1].GetScore()}");
+            }
             sortParticipantGroup(ref participants_grp_0);
             sortParticipantGroup(ref participants_grp_1);
             Console.WriteLine(table_title);
 
-            // sort and place all values from participants_grp_0 and participants_grp_1 into the final array
+            // Sort and place all values from participants_grp_0 and participants_grp_1 into the final array
             Participant[] final_array = new Participant[participants_grp_1.Length + participants_grp_0.Length];
             int i = 0, j = 0, k = 0;
             int n1 = participants_grp_0.Length, n2 = participants_grp_1.Length;
@@ -160,29 +171,48 @@ namespace ConsoleApplication1
 
             Console.WriteLine("Groups:");
             printGroup(final_array);
-        }
-        static Participant[,] parseInputFile(string path, int group_amount)
-        {
-            Participant[,] tmp_participants = new Participant[group_amount, File.ReadAllLines(path).Length];
-            string line;
-            StreamReader sr = new StreamReader(path);
-            int group_participants_remaining = 0, total_participants = 0, current_group = 0;
-            int[] group_sizes = new int[File.ReadAllLines(path).Length];
-            while ((line = sr.ReadLine()) != null)
+            Console.Write("\nSave the list in a file (y/N): ");
+            string answer = Console.ReadLine();
+            Console.WriteLine();
+            if (answer == "y" || answer == "Y")
             {
-                group_participants_remaining = int.Parse(line);Console.WriteLine($"GROUP PARTICIPANTS LINE: {group_participants_remaining}");
-                int current_group_participant = 0;
-                group_sizes[current_group] = group_participants_remaining;
-                while (group_participants_remaining > 0)
-                {
-                    group_participants_remaining--;
-                    line = sr.ReadLine();
-                    tmp_participants[current_group, current_group_participant] = new Participant(line.Split(' ')[0], line.Split(' ')[1], float.Parse(line.Split(' ')[2]));
-                    total_participants++; Console.WriteLine($"Added from parser {tmp_participants[current_group, current_group_participant].GetFullName()}, score: {tmp_participants[current_group, current_group_participant].GetScore()}");
-                }
-                current_group++;
+                Console.WriteLine("Enter a file name: ");
+                string filename = Console.ReadLine();
+                saveToFile(final_array, filename);
             }
-            return tmp_participants;
+            Console.WriteLine("Have a good day!");
+        }
+        static void saveToFile(Participant[] array, string output_filename)
+        {
+            StreamWriter sw = new StreamWriter(output_filename);
+            for (int i = 0; i < array.Length; i++)
+            {
+                sw.WriteLine($"{array[i].GetFullName()} {array[i].GetScore()}");
+            }
+            sw.Close();
+        }
+        static Participant[,] parseInputFile(string path)
+        {
+            string line;
+            StreamReader sr = new StreamReader(path);   // Open the input file in read-only mode
+            int group_amount = int.Parse(sr.ReadLine());   // Read the amount of groups (first line)
+            Participant[,] tmp_participants = new Participant[group_amount, File.ReadAllLines(path).Length];    // Create a 2D array to sort participants by groups
+            int group_participants_remaining = 0, current_group = 0;
+            // Parse the input file line by line
+            while ((line = sr.ReadLine()) != null)  // Go on until sr is empty
+            {
+                group_participants_remaining = int.Parse(line); // Get the number of participants in the current group
+                int current_group_participant = 0;  // Index of the current participant in the current group (incremented)
+                while (group_participants_remaining > 0)    // For each group
+                {
+                    group_participants_remaining--;   // Decrement the number of participants in the current group
+                    line = sr.ReadLine();
+                    tmp_participants[current_group, current_group_participant] = new Participant(line.Split(' ')[0], line.Split(' ')[1], float.Parse(line.Split(' ')[2]));  // Create a new participant and add it to the current group
+                    current_group_participant++;  // Increment the current group participant index
+                }
+                current_group++;    // Increment the current group index
+            }
+            return tmp_participants;    // Return the 2D array
         }
         static void sortParticipantGroup(ref Participant[] participant_group)
         {

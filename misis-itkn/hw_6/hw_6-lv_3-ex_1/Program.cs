@@ -29,12 +29,6 @@ namespace ConsoleApplication1
             this.grades = grades;
             this.CalculateGPA();
         }
-        public void AddGrade(float grade)
-        {
-            Array.Resize(ref this.grades, this.grades.Length + 1);
-            this.grades[this.grades.Length - 1] = grade;
-            this.CalculateGPA();
-        }
         public float GetGPA()
         {
             return this.gpa;
@@ -72,6 +66,7 @@ namespace ConsoleApplication1
             this.student_count++;
             CalculateAverageGPA();
         }
+        // Sort students in the group by GPA
         public void SortByGPA()
         {
             Student[] new_students = new Student[this.student_count];
@@ -93,6 +88,7 @@ namespace ConsoleApplication1
             }
             this.students = new_students;
         }
+        // Calculate average GPA for the group (as per the task)
         public void CalculateAverageGPA()
         {
             float gpa_sum = 0;
@@ -102,6 +98,7 @@ namespace ConsoleApplication1
             }
             this.average_gpa = gpa_sum / this.student_count;
         }
+        // The get methods are here to protect values of the group (they should not be changed manually)
         public float GetAverageGPA()
         {
             return this.average_gpa;
@@ -114,6 +111,7 @@ namespace ConsoleApplication1
         {
             return this.group_name;
         }
+        // Set the group name (needed to output groups in a sorted manner)
         public void SetGroupName(string group_name)
         {
             this.group_name = group_name;
@@ -125,12 +123,12 @@ namespace ConsoleApplication1
         {
             string table_name = "Student groups - GPA rating";
             Student[] students = new Student[6];
-            students[0] = new Student("Oleg", "Styopovich", "BPM-21-1", new float[] {3.3F, 3.5F, 3.7F});
-            students[1] = new Student("Kot", "Artyomovich", "BPM-21-1", new float[] {2, 4.4F, 3.7F});
-            students[2] = new Student("Anya", "Ahhhhhh", "BPM-21-3", new float[] {4.1F, 4, 3.9F});
-            students[3] = new Student("Galina", "Kry'nya", "BPM-21-2", new float[] {3.3F, 2.3F, 4.6F});
-            students[4] = new Student("Excel", "Breightnbikher", "BPM-21-2", new float[] {2.5F, 4.4F, 4.1F});
-            students[5] = new Student("Tema", "Claudrepovich", "BPM-21-1", new float[] {2.2F, 4.7F, 3.99F});
+            students[0] = new Student("Oleg", "Styopovich", "BPM-21-1", new float[] {3.3F, 3.5F, 3.7F, 4.4F, 3.3F});
+            students[1] = new Student("Kot", "Artyomovich", "BPM-21-1", new float[] {2, 4.4F, 3.7F, 4, 4.2F});
+            students[2] = new Student("Anya", "Ahhhhhh", "BPM-21-3", new float[] {4.1F, 4, 3.9F, 2.1F, 4.9F});
+            students[3] = new Student("Galina", "Kry'nya", "BPM-21-2", new float[] {3.3F, 2.3F, 4.6F, 4.6F, 4});
+            students[4] = new Student("Excel", "Breightnbikher", "BPM-21-2", new float[] {2.5F, 4.4F, 4.1F, 3.1F, 3});
+            students[5] = new Student("Tema", "Claudrepovich", "BPM-21-1", new float[] {2.2F, 4.7F, 3.99F, 4, 4.1F});
             StudentGroup[] student_groups = new StudentGroup[listGroups(students).Length];
             sortStudentsByGroup(ref student_groups, students);
             sortGroupsByAverageGPA(ref student_groups);
@@ -144,6 +142,7 @@ namespace ConsoleApplication1
                 student_groups[group].SortByGPA();
             }
         }
+        // Get a list of all groups in Student array
         static string[] listGroups(Student[] students) {
             string[] groups = new string[students.Length];
             int group_amount = 0;
@@ -162,6 +161,7 @@ namespace ConsoleApplication1
             }
             return new_groups;
         }
+        // Sort groups by average GPA in them (median)
         static void sortGroupsByAverageGPA(ref StudentGroup[] groups)
         {
             for (int i = 0; i < groups.Length; i++)
@@ -177,6 +177,7 @@ namespace ConsoleApplication1
                 }
             }
         }
+        // Sort students by group (insert directly to StudentGroup array)
         static void sortStudentsByGroup(ref StudentGroup[] student_groups, Student[] students) {
             string[] groups = listGroups(students);
             for (int group = 0; group < groups.Length; group++)
@@ -192,6 +193,7 @@ namespace ConsoleApplication1
                 }
             }
         }
+        // Print a formatted table of student groups
         static void printTableOfStudentsByGroup(StudentGroup[] student_groups, string table_title)
         {
             Console.WriteLine($"{table_title}\n");

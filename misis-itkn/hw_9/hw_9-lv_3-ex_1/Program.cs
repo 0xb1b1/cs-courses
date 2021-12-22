@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Text;
+using System.IO;
 namespace ConsoleApplication1
 {
     class Person
@@ -47,12 +49,6 @@ namespace ConsoleApplication1
         public void SetGrades(float[] grades)
         {
             this.grades = grades;
-            this.CalculateGPA();
-        }
-        public void AddGrade(float grade)
-        {
-            Array.Resize(ref this.grades, this.grades.Length + 1);
-            this.grades[this.grades.Length - 1] = grade;
             this.CalculateGPA();
         }
         public float GetGPA()
@@ -131,18 +127,43 @@ namespace ConsoleApplication1
         static void Main(string[] args)
         {
             string table_name = "Student groups - GPA rating";
-            Student[] students = new Student[6];
-            students[0] = new Student("Oleg", "Styopovich", "BPM-21-1", new float[] {3.3F, 3.5F, 3.7F});
-            students[1] = new Student("Kot", "Artyomovich", "BPM-21-1", new float[] {2, 4.4F, 3.7F});
-            students[2] = new Student("Anya", "Ahhhhhh", "BPM-21-3", new float[] {4.1F, 4, 3.9F});
-            students[3] = new Student("Galina", "Kry'nya", "BPM-21-2", new float[] {3.3F, 2.3F, 4.6F});
-            students[4] = new Student("Excel", "Breightnbikher", "BPM-21-2", new float[] {2.5F, 4.4F, 4.1F});
-            students[5] = new Student("Tema", "Claudrepovich", "BPM-21-1", new float[] {2.2F, 4.7F, 3.99F});
+            string filename = @"participants.list";
+            Student[] students = parseInputFile(filename);
             StudentGroup[] student_groups = new StudentGroup[listGroups(students).Length];
             sortStudentsByGroup(ref student_groups, students);
             sortGroupsByAverageGPA(ref student_groups);
             sortGrouppedStudentsByGPA(ref student_groups);
             printTableOfStudentsByGroup(student_groups, table_name);
+        }
+        static void saveToFile(Student[] array, string output_filename)
+        {
+            StreamWriter sw = new StreamWriter(output_filename);
+            for (int i = 0; i < array.Length; i++)
+            {
+                sw.WriteLine($"{array[i].GetFullName()} {array[i].GetGPA()}");
+            }
+            sw.Close();
+        }
+        static Student[] parseInputFile(string path)
+        {
+            // Count lines in input file
+            int lines_count = 0;
+            using (StreamReader r = new StreamReader(path))
+            {
+                while (r.ReadLine() != null) { lines_count++; }
+            }
+            string line;
+            StreamReader sr = new StreamReader(path);   // Open the input file in read-only mode
+            Student[] students = new Student[lines_count]; // Create a 2D array to sort students by groups
+            // Parse the input file line by line
+            int current_student = 0;
+            while ((line = sr.ReadLine()) != null)
+            {
+                string[] words = line.Split(' ');Console.WriteLine(words[0], words[1], words[2], float.Parse(words[3]), float.Parse(words[4]), float.Parse(words[5]), float.Parse(words[6]), float.Parse(words[7]));
+                students[current_student] = new Student(words[0], words[1], words[2], new float[] { float.Parse(words[3]), float.Parse(words[4]), float.Parse(words[5]), float.Parse(words[6]), float.Parse(words[7]) });
+                current_student++;
+            }
+            return students;
         }
         static void sortGrouppedStudentsByGPA(ref StudentGroup[] student_groups)
         {
