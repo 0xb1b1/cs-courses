@@ -17,13 +17,7 @@ namespace ConsoleApplication1
         {
             float area_0 = heronsFormula(triangle_0[0], triangle_0[1], triangle_0[2]);
             float area_1 = heronsFormula(triangle_1[0], triangle_1[1], triangle_1[2]);
-            switch (area_0 >= area_1)
-            {
-                case true:
-                    return true;
-                case false:
-                    return false;
-            }
+            return (area_0 >= area_1);
         }
         static void outputResult(float[] triangle_0, float[] triangle_1)
         {
