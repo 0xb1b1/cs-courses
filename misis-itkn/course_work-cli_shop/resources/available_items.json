@@ -1,0 +1,14 @@
+{
+    "available_items": {
+        "Moscow": [
+            "Apple",
+            "Orange",
+            "Banana"
+        ],
+        "Saint Petersburg": [
+            "Apple",
+            "Orange",
+            "Pineapple"
+        ]
+    }
+}

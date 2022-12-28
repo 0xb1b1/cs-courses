@@ -1,0 +1,28 @@
+{
+    "items": [
+        {
+            "Name": "Apple",
+            "Price": 199.0,
+            "Description": "A delicious apple",
+            "Weight": 0.5
+        },
+        {
+            "Name": "Orange",
+            "Price": 299.0,
+            "Description": "A good orange",
+            "Weight": 0.5
+        },
+        {
+            "Name": "Banana",
+            "Price": 99.0,
+            "Description": "A nice banana",
+            "Weight": 0.5
+        },
+        {
+            "Name": "Pineapple",
+            "Price": 399.0,
+            "Description": "A tasty pineapple",
+            "Weight": 0.5
+        }
+    ]
+}
